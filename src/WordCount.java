@@ -12,8 +12,7 @@ import java.util.*;
  */
 public class WordCount {
 
-	private static Set<String> WordInfo = new HashSet<String>(); // store word, word count, and sentence numbers
-	private static ArrayList<String> AllWords = new ArrayList<String>();
+	private static ArrayList<String> AllWords = new ArrayList<String>(); // arraylist for words in document
 	
 	public static void main (String [] args) {
 
@@ -26,12 +25,10 @@ public class WordCount {
 			
 		}
 
-		// Add all words to HashMap
 		String curLine = "";
 		try {
 			while ((curLine = inputReader.readLine()) != null) {
 				String contents = curLine;
-				// System.out.println(contents);
 				addWords(contents);
 				Collections.sort(AllWords); // alphabetize list of words in document
 				Iterator<String> wordItr = AllWords.iterator();
@@ -51,8 +48,6 @@ public class WordCount {
 		} catch (IOException e) {
 
 		}
-
-		//solve(AllLines);
         
 		return;
 	}
@@ -60,92 +55,88 @@ public class WordCount {
 	
 	
 	private static void solve(String given, String word) {
-		//System.out.println(given);
 		Scanner scan = new Scanner(given);
 		int wordCount = 0;
 		int sentenceCount = 0;
 		String sentenceLine = "";
-		ArrayList<Integer> sentences = new ArrayList<Integer>();
-		char firstChar, nextLastChar, lastChar;
+		char lastChar;
+		
 		String curWord;
-
 		while (scan.hasNext()) {
 			curWord = scan.next().toLowerCase();
-			firstChar =  curWord.charAt(0);
 			lastChar = curWord.charAt(curWord.length()-1);
-			if (isPunctuation(firstChar)){
-				curWord = curWord.substring(1, curWord.length()-1);
-			}
-			
-			if (isPunctuation(lastChar) &!isPunctuation(firstChar)){
-				nextLastChar = lastChar;
-				while (isPunctuation(nextLastChar)) {
-					curWord = curWord.substring(0, curWord.length()-1);
-					nextLastChar = curWord.charAt(curWord.length()-1);
-				}
-			}
-			//System.out.println(curWord);
+			curWord = trimWord(curWord);
 			if (curWord.equals(word)) {
 				wordCount++;
 				sentenceLine += "" + sentenceCount + ",";
 			}
 			if (isEnding(lastChar)) {
-				//System.out.println(curWord + " " + sentenceCount + " " + lastChar);
-				sentences.add(sentenceCount);
 				sentenceCount++;
 			}
 		}
-		//System.out.println(word + " " + sentenceCount);
 		scan.close();
-		sentences.add(0, wordCount); // add word count as first element of arraylist
-		//WordInfo.put(word.toLowerCase(),sentences); // associate word with arraylist
 		if (!word.isEmpty()) {
-			//String s = "E.G.";
-			
 			System.out.println(word.toLowerCase() + "\t" + "{" + wordCount + ":" + sentenceLine.substring(0, sentenceLine.length()-1) + "}");
 		}
 	}
 	
 	
+	/*
+	 * Adds all the words in the argument to AllWords.
+	 */
 	private static void addWords(String line) {
-		//System.out.println(line);
 		Scanner scan = new Scanner(line);
-		String word;
-		
-		char firstChar, nextLastChar, lastChar;
 		String curWord;
 		while (scan.hasNext()) {
 			curWord = scan.next().toLowerCase();
-			firstChar =  curWord.charAt(0);
-			lastChar = curWord.charAt(curWord.length()-1);
-			if (isPunctuation(firstChar)){
-				curWord = curWord.substring(1, curWord.length()-1);
-			}
-			if (isPunctuation(lastChar) &!isPunctuation(firstChar)){
-				nextLastChar = lastChar;
-				while (isPunctuation(nextLastChar)) {
-					curWord = curWord.substring(0, curWord.length()-1);
-					nextLastChar = curWord.charAt(curWord.length()-1);
-				}
-			}
-			//System.out.println(curWord);
-			if (WordInfo.add(curWord)) {
+			curWord = trimWord(curWord);
+			if (!AllWords.contains(curWord)){
 				AllWords.add(curWord);
 			}
 		}
 		scan.close();
 	}
 	
+	/*
+	 * Returns a boolean indicating whether the argument is a sentence
+	 * ending.
+	 */
 	private static boolean isEnding(char given) {
 		return given == '.' || given == '!' || given == '?';
 	}
 	
+	/*
+	 * Returns a boolean indicating whether the argument is a standard
+	 * English punctuation mark.
+	 */
 	private static boolean isPunctuation(char given) {
 		return given == '.' || given == '!' || given == '?'
 				|| given == ':' || given == ';' || given == '"'
 				|| given == ',' || given == '(' || given == ')'
 				|| given == '[' || given == ']' || given == '-'
 				|| given == '/';
+	}
+	
+	/*
+	 * Remove punctuation marks surrounding argument and return.
+	 */
+	private static String trimWord(String given) {
+		char firstChar, nextLastChar, lastChar;
+		firstChar =  given.charAt(0);
+		lastChar = given.charAt(given.length()-1);
+		
+		if (isPunctuation(firstChar)){
+			given = given.substring(1, given.length()-1);
+		}
+		if (isPunctuation(lastChar) &!isPunctuation(firstChar)){
+			nextLastChar = lastChar;
+			while (isPunctuation(nextLastChar)) {
+				given = given.substring(0, given.length()-1);
+				nextLastChar = given.charAt(given.length()-1);
+			}
+		}
+		
+		return given;
 	}
 	
 }
