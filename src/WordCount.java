@@ -15,14 +15,12 @@ public class WordCount {
 	private static ArrayList<String> AllWords = new ArrayList<String>(); // arraylist for words in document
 	
 	public static void main (String [] args) {
-
         File file = new File(args[0]);
 		BufferedReader inputReader = null;
 		
 		try {
 			inputReader = new BufferedReader(new FileReader(file));
 		} catch (FileNotFoundException e) {
-			
 		}
 
 		String curLine = "";
@@ -37,23 +35,23 @@ public class WordCount {
 					String curWord = wordItr.next();
 					solve(contents, curWord);
 				}
-				
 			}
 		} catch (IOException e) {
-
 		}
 
 		try {
 			inputReader.close();
 		} catch (IOException e) {
-
 		}
         
 		return;
 	}
 	
 	
-	
+	/*
+	 * Compute the sentence count of the given word and list of sentences it
+	 * appears in and print.
+	 */
 	private static void solve(String given, String word) {
 		Scanner scan = new Scanner(given);
 		int wordCount = 0;

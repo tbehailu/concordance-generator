@@ -1,0 +1,1 @@
+The following problems require the algebraic computation of limits of functions as x approaches plus or minus infinity. Most problems are average. A few are somewhat challenging. All of the solutions are given WITHOUT the use of L'Hopital's Rule. 
